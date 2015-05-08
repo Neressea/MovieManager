@@ -5,6 +5,6 @@ public class Duo<K, V>{
 	private V value;
 
 	public static void main(String[] args) {
-		Duo d = new Duo<Integer, String>();
+		Duo<Integer, String> d = new Duo<Integer, String>();
 	}
 }
