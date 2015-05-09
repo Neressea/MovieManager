@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Table <K extends Movie, V extends ListMovies>{
+public class Table <K extends Movie, V>{
 	private ArrayList<Duo<K, V>> liste;
 
 	public Table(){
