@@ -1,12 +1,22 @@
 package model;
 
 import java.util.ArrayList;
+import javax.swing.table.AbstractTableModel;
 
-public class ListMovies<K extends Movie> implements Barycentrable<K>{
+public class ListMovies<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
+	public static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Type", "Acteurs", "Genre", "Description"};
+
 	private ArrayList<K> list;
 	private K barycentre;
 
+	public ListMovies(){
+		super();
+		list = new ArrayList<K>();
+		barycentre = null;
+	}
+
 	public ListMovies(K movie){
+		super();
 		ArrayList<K> list = new ArrayList<K>();
 		barycentre = movie;
 	}
@@ -37,6 +47,23 @@ public class ListMovies<K extends Movie> implements Barycentrable<K>{
 	public void addMovie(K newmovie){
 		this.list.add(newmovie);
 	}
+
+	//Inherited by AbstractTableModel
 	
+	public int getRowCount() {
+        return list.size();
+    }
+ 
+    public int getColumnCount() {
+        return head.length;
+    }
+ 
+    public String getColumnName(int columnIndex) {
+        return head[columnIndex];
+    }
+ 
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        return ((Movie)list.get(rowIndex)).toObjectTable()[columnIndex];
+    }
 
 }

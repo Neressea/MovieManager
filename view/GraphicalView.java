@@ -2,10 +2,10 @@ package view;
 
 import javax.swing.*;
 import controller.*;
+import model.*;
 import java.awt.Dimension;
 
 public class GraphicalView extends JFrame{
-	private static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Type", "Acteurs", "Genre", "Description"};
 
 	public GraphicalView(){
 		this(500, 600);
@@ -19,14 +19,19 @@ public class GraphicalView extends JFrame{
 		createMenu();
 
 		JTabbedPane table = new JTabbedPane(SwingConstants.TOP);
+		table.addChangeListener(new PropositionController());
 
-		JTable my_movies = new JTable(new Object[][]{}, head);
-		JTable my_propositions = new JTable(new Object[][]{}, head);
-		JTable base = new JTable(new Object[][]{}, head);
+		ListMovies<Movie> movies = null;
+		try{
+			movies = Movie.load("films.txt");
+		}catch(Exception e){
+			System.out.println("Erreur durant la lecture du fichier");
+			e.printStackTrace();
+		}
 
-		my_movies.setPreferredSize(new Dimension(width, height * 2));
-		my_propositions.setPreferredSize(new Dimension(width, height * 2));
-		base.setPreferredSize(new Dimension(width, height * 2));
+		JTable my_movies = new JTable(new Object[][]{}, ListMovies.head);
+		JTable my_propositions = new JTable(new Object[][]{}, ListMovies.head);
+		JTable base = new JTable(movies);
 
 		table.addTab("Mes films", new JScrollPane(my_movies));
 		table.addTab("Mes recommandations", new JScrollPane(my_propositions));
@@ -49,7 +54,10 @@ public class GraphicalView extends JFrame{
 		barre.add(help);
 
 		JMenuItem json = new JMenuItem("Exporter la liste courante en JSON");
+		json.addActionListener(new JSONController());
+
 		JMenuItem import_base = new JMenuItem("Importer un fichier de films");
+		import_base.addActionListener(new BaseController());
 
 		file.add(json);
 		file.add(import_base);

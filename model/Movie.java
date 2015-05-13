@@ -18,8 +18,8 @@ public class Movie{
 
 	public Movie(){}
 
-	public static ArrayList<Movie> load(String file) throws IOException{
-		ArrayList<Movie> movies = new ArrayList<Movie>();
+	public static ListMovies<Movie> load(String file) throws IOException{
+		ListMovies<Movie> movies = new ListMovies<Movie>();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 
 		String line = reader.readLine();
@@ -50,7 +50,8 @@ public class Movie{
 				fill(m, line);
 				line = reader.readLine();
 			}
-			System.out.println(m);
+			
+			movies.addMovie(m);
 
 			//We read all the blank lines
 			while(line != null && line.equals("")) line = reader.readLine();
@@ -137,9 +138,13 @@ public class Movie{
 		return dist;
 	}
 
+	public Object[] toObjectTable(){
+		return new Object[]{id, title, year, duration, type, actors, kinds, description};
+	}
+
 	public static void main(String[] args) {
 	
-		ArrayList<Movie> movies=null;
+		/*ArrayList<Movie> movies=null;
 
 		try{
 			movies = load("films.txt");
@@ -150,6 +155,6 @@ public class Movie{
 
 		for (int i=0; i<movies.size() && movies != null; i++) {
 			System.out.println(movies.get(i));
-		}
+		}*/
 	}
 }
