@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class Movie{
 
-	private String titre, description, director;
+	private String title, description, director;
 	private int duration, year;
 	private ArrayList<String> kinds;
 	private ArrayList<String> actors;
@@ -32,7 +32,7 @@ public class Movie{
 			m.id = Integer.parseInt(specs[0]);
 			specs = line.split("[0-9]+\\.");
 			specs = specs[1].split("\\(");
-			m.titre = specs[0];
+			m.title = specs[0];
 			specs = specs[1].split("\\)");
 			specs = specs[0].split("TV");
 			m.year = Integer.parseInt(specs[0].trim());
@@ -85,7 +85,7 @@ public class Movie{
 	}
 
 	public String toString(){
-		String show = id+". "+titre+" ("+year;
+		String show = id+". "+title+" ("+year;
 		show += (type.equals("TV")) ? " TV Series)\n\n" : ")\n\n";
 		show+=description+"\n\n";
 
@@ -117,7 +117,7 @@ public class Movie{
 	* For each spec, we add a weight if they arre different, or 0 if they are the same.
 	* In order to add a hierarchy in the specs, each weight is the double of the weight of the precedent spec.
 	* Here is the hierarchy :
-	* 		-> name 16
+	* 		-> title 16
 	* 		-> kinds 8 (each kind is weight 8/number of kinds)
 	* 		-> director 4
 	* 		-> actors 2 (each actor is weight 2/number of actors)
@@ -128,7 +128,7 @@ public class Movie{
 	public double dist(Movie m){
 		double dist = 0;
 
-		dist+=(name.match("*"+m.name+"*")) ? 0 : 16;
+		dist+=(title.matches("*"+m.title+"*") || m.title.matches("*"+title+"*")) ? 0 : 16;
 		dist+=(true) ? 0 : 8.0 / kinds.size();
 		dist+=(director.equals(m.director)) ? 0 : 4;
 		dist+=(true) ? 0 : 2.0 / actors.size();
