@@ -2,18 +2,18 @@ package model;
 
 import java.util.ArrayList;
 
-public class ListMovies{
-	private ArrayList<Movie> list;
-	private Movie barycentre;
+public class ListMovies<K extends Movie> implements Barycentrable<K>{
+	private ArrayList<K> list;
+	private K barycentre;
 
-	public ListMovies(){
-		ArrayList<Movie> list = new ArrayList<Movie>();
-		Movie barycentre = new Movie();
+	public ListMovies(K movie){
+		ArrayList<K> list = new ArrayList<K>();
+		barycentre = movie;
 	}
 
 	public void findBarycentre(){
 		int min = 20; // i.e. here 20 mean infinity
-		Movie temp = new Movie();		
+		K temp;		
 
 		for (int i =0 ; i < this.list.size(); i++){
 			int dist = 0;			
@@ -30,11 +30,11 @@ public class ListMovies{
 
 	}
 
-	public Movie getBarycentre(){
+	public K getBarycentre(){
 		return this.barycentre;
 	}
 
-	public void addMovie(Movie newmovie){
+	public void addMovie(K newmovie){
 		this.list.add(newmovie);
 	}
 	

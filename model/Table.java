@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Table <K extends Movie, V extends ListMovies>{
+public class Table <K extends Movie, V extends Barycentrable<K>> implements Barycentrable<K>{
 	private ArrayList<Duo<K, V>> liste;
 
 	public Table(){
@@ -13,10 +13,10 @@ public class Table <K extends Movie, V extends ListMovies>{
 		this.liste.add(newduo);
 	}
 
-	public Movie getBarycentre(){
-		ListMovies temp = new ListMovies();		
+	public K getBarycentre(){
+		ListMovies<K> temp = new ListMovies<K>(liste.get(0).getK());		
 
-		for (int i = 0; i < liste.size(); i++){
+		for (int i = 1; i < liste.size(); i++){
 			temp.addMovie(this.liste.get(i).getK());
 		}
 

@@ -1,6 +1,6 @@
 package model;
 
-public class Duo<K extends Movie, V extends ListMovies>{
+public class Duo<K extends Movie, V extends Barycentrable<K>>{
 	private K key;
 	private V value;
 
