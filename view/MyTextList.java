@@ -50,4 +50,21 @@ public class MyTextList extends JPanel{
 		p1.add(new JTextField(25));
 		//p.repaint();
 	}
+
+	public void init(){
+		list.removeAll();
+		fields.clear();
+		fields.add(new JTextField(25));
+		list.add(fields.get(fields.size()-1));	
+	}
+
+	public ArrayList<String> toList(){
+		ArrayList<String> l = new ArrayList<String>();
+
+		for (int i=0; i<fields.size(); i++) {
+			l.add(fields.get(i).getText());
+		}
+
+		return l;
+	}
 }

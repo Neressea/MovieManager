@@ -2,9 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
+import model.*;
 
 public class ListMovies<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
-	public static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Type", "Acteurs", "Genre", "Description"};
+	private static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Réalisateur", "Type", "Acteurs", "Genre", "Description"};
 
 	private ArrayList<K> list;
 	private K barycentre;
@@ -40,12 +41,36 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 	}
 
+	public String toJson(){
+		String json="{\"barycentre\":";
+		json+= (barycentre != null) ? barycentre.toJson() : "\"null\"";
+		json+= ",\"list\":[";
+
+		for (int i=0; i<list.size(); i++) {
+			json+=list.get(i).toJson();
+			json+= (i<list.size()-1) ? "," : "";
+		}
+
+		return json+"]}";
+	}
+
+	public static ListMovies<Movie> fromJson(String json){
+		ListMovies<Movie> lm = new ListMovies<Movie>();
+
+		String [] elems = json.split(":");
+		lm.barycentre = (!elems[1].equals("null")) ? Movie.fromJson(elems[1]) : null;
+		elems = json.split("[");
+
+		return lm;
+	}
+
 	public K getBarycentre(){
 		return this.barycentre;
 	}
 
 	public void addMovie(K newmovie){
 		this.list.add(newmovie);
+		fireTableDataChanged();
 	}
 
 	//Inherited by AbstractTableModel

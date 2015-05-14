@@ -18,6 +18,49 @@ public class Movie{
 
 	public Movie(){}
 
+	public String toJson(){
+		String json="{\"title\":\""+title+"\",";
+		json+="\"description\":\""+description+"\",";
+		json+="\"director\":\""+director+"\",";
+		json+="\"duration\":\""+duration+"\",";
+		json+="\"year\":\""+year+"\",";
+		json+="\"type\":\""+type+"\",";
+		json+="\"id\":\""+id+"\",";
+		json+="\"kinds\":[";
+
+		for (int i=0; i<kinds.size(); i++) {
+			json+="\""+kinds.get(i)+"\"";
+			json+= (i < kinds.size()-1) ? "," : "";
+		}
+
+		json+="],\"actors\":[";
+
+		for (int i=0; i<actors.size(); i++) {
+			json+="\""+actors.get(i)+"\"";
+			json+= (i < actors.size()-1) ? "," : "";
+		}
+		
+		return json+"]}";
+	}
+
+	public static Movie fromJson(String json){
+		Movie m = new Movie();
+
+		return m;
+	}
+
+	public Movie(int i, String t, int y, int du, String dir, String ty, ArrayList<String> k, ArrayList<String> a, String d){
+		id=i;
+		title=t;
+		year=y;
+		duration=du;
+		director=dir;
+		type=ty;
+		kinds=k;
+		actors=a;
+		description=d;
+	}
+
 	public static ListMovies<Movie> load(String file) throws IOException{
 		ListMovies<Movie> movies = new ListMovies<Movie>();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -139,7 +182,7 @@ public class Movie{
 	}
 
 	public Object[] toObjectTable(){
-		return new Object[]{id, title, year, duration, type, actors, kinds, description};
+		return new Object[]{id, title, year, duration, director, type, actors, kinds, description};
 	}
 
 	public static void main(String[] args) {

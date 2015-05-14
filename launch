@@ -1,5 +1,5 @@
-javac ./model/*.java
+javac -cp gson.jar:. ./model/*.java
 javac -cp jdatepicker.jar:. ./view/*.java
 javac ./controller/*.java
-java -cp jdatepicker.jar:. view.GraphicalView
+java -cp jdatepicker.jar:gson.jar:. view.GraphicalView
 
