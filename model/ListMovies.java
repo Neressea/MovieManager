@@ -3,6 +3,11 @@ package model;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import model.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class ListMovies<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
 	private static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Réalisateur", "Type", "Acteurs", "Genre", "Description"};
@@ -39,6 +44,74 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 		}
 
+	}
+
+	public static ListMovies<Movie> load(String file) throws IOException{
+		ListMovies<Movie> movies = new ListMovies<Movie>();
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+
+		String line = reader.readLine();
+		while (line != null){
+			Movie m = new Movie();
+
+			//We read the first line
+			String [] specs = line.split("\\.");
+			m.setId(Integer.parseInt(specs[0]));
+			specs = line.split("[0-9]+\\.");
+			specs = specs[1].split("\\(");
+			m.setTitle (specs[0]);
+			specs = specs[1].split("\\)");
+			specs = specs[0].split("TV");
+			m.setYear(Integer.parseInt(specs[0].trim()));
+			m.setType(((specs.length > 1) ? "TV" : "Movie"));
+
+			//We read the description
+			line=reader.readLine();
+			String d="";
+			while(line != null && !(line.contains("With : ") || line.contains("Director : "))){
+				d = d.concat(line);
+				line=reader.readLine();
+			}
+			m.setDesc(d);
+
+			while(!line.equals("")){
+				fill(m, line);
+				line = reader.readLine();
+			}
+			
+			movies.addMovie(m);
+
+			//We read all the blank lines
+			while(line != null && line.equals("")) line = reader.readLine();
+		}
+
+		reader.close();
+		return movies;
+	}
+
+	public static void fill(Movie m, String line){
+		if(line.contains("Director"))
+			m.setDirector(line.split(":")[1]);
+		else if(line.contains("With")){
+			m.setActors(new ArrayList<String>(Arrays.asList(line.split(":")[1].split(","))));
+		}else{
+			ArrayList<String> kinds = new ArrayList<String>();
+			String [] k = line.split("\\|");
+			String last_case = k[k.length - 1];
+
+			if(k.length == 1){
+				m.setDuration((last_case.split(" ").length >= 3) ? Integer.parseInt(last_case.split(" ")[1]) : 0);
+			}else if(k.length > 1){
+				m.setDuration((last_case.split(" ").length >= 3) ? Integer.parseInt(last_case.split(" ")[2]) : 0);
+			}
+
+			
+			k[k.length-1] = k[k.length-1].replaceFirst("[0-9]+ mins\\.", "");
+			for (int i=0; i<k.length; i++) {
+				kinds.add(k[i]);
+			}
+			m.setKinds(kinds);
+		}
 	}
 
 	public String toJson(){

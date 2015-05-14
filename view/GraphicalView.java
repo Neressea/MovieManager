@@ -34,7 +34,7 @@ public class GraphicalView extends JFrame{
 
 		movies_base = null;
 		try{
-			movies_base = Movie.load("films.txt");
+			movies_base = ListMovies.load("films.txt");
 		}catch(Exception e){
 			System.out.println("Erreur durant la lecture du fichier");
 			e.printStackTrace();

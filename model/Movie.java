@@ -61,73 +61,6 @@ public class Movie{
 		description=d;
 	}
 
-	public static ListMovies<Movie> load(String file) throws IOException{
-		ListMovies<Movie> movies = new ListMovies<Movie>();
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-
-		String line = reader.readLine();
-		while (line != null){
-
-			Movie m = new Movie();
-
-			//We read the first line
-			String [] specs = line.split("\\.");
-			m.id = Integer.parseInt(specs[0]);
-			specs = line.split("[0-9]+\\.");
-			specs = specs[1].split("\\(");
-			m.title = specs[0];
-			specs = specs[1].split("\\)");
-			specs = specs[0].split("TV");
-			m.year = Integer.parseInt(specs[0].trim());
-			m.type = (specs.length > 1) ? "TV" : "Movie";
-
-			//We read the description
-			line=reader.readLine();
-			m.description="";
-			while(line != null && !(line.contains("With : ") || line.contains("Director : "))){
-				m.description = m.description.concat(line);
-				line=reader.readLine();
-			}
-
-			while(!line.equals("")){
-				fill(m, line);
-				line = reader.readLine();
-			}
-			
-			movies.addMovie(m);
-
-			//We read all the blank lines
-			while(line != null && line.equals("")) line = reader.readLine();
-		}
-
-		reader.close();
-		return movies;
-	}
-
-	public static void fill(Movie m, String line){
-		if(line.contains("Director"))
-			m.director = line.split(":")[1];
-		else if(line.contains("With")){
-			m.actors = new ArrayList<String>(Arrays.asList(line.split(":")[1].split(",")));
-		}else{
-			m.kinds = new ArrayList<String>();
-			String [] k = line.split("\\|");
-			String last_case = k[k.length - 1];
-
-			if(k.length == 1){
-				m.duration = (last_case.split(" ").length >= 3) ? Integer.parseInt(last_case.split(" ")[1]) : 0;
-			}else if(k.length > 1){
-				m.duration = (last_case.split(" ").length >= 3) ? Integer.parseInt(last_case.split(" ")[2]) : 0;
-			}
-
-			
-			k[k.length-1] = k[k.length-1].replaceFirst("[0-9]+ mins\\.", "");
-			for (int i=0; i<k.length; i++) {
-				m.kinds.add(k[i]);
-			}
-		}
-	}
-
 	public String toString(){
 		String show = id+". "+title+" ("+year;
 		show += (type.equals("TV")) ? " TV Series)\n\n" : ")\n\n";
@@ -199,5 +132,34 @@ public class Movie{
 		for (int i=0; i<movies.size() && movies != null; i++) {
 			System.out.println(movies.get(i));
 		}*/
+	}
+
+	public void setId(int i){
+		id=i;
+	}
+
+	public void setTitle(String t){
+		title=t;
+	}
+	public void setDirector(String d){
+		director=d;
+	}
+	public void setDuration(int d){
+		duration=d;
+	}
+	public void setYear(int y){
+		year=y;
+	}
+	public void setType(String t){
+		type=t;
+	}
+	public void setActors(ArrayList<String> l){
+		actors = l;		
+	}
+	public void setKinds(ArrayList<String> l){
+		kinds = l;	
+	}
+	public void setDesc(String desc){
+		description=desc;
 	}
 }
