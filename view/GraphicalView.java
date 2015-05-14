@@ -3,9 +3,12 @@ package view;
 import javax.swing.*;
 import controller.*;
 import model.*;
-import java.awt.Dimension;
+import java.awt.*;
+import java.awt.event.*;
 
 public class GraphicalView extends JFrame{
+
+	private PopupAddMovie popup;
 
 	public GraphicalView(){
 		this(500, 600);
@@ -33,11 +36,24 @@ public class GraphicalView extends JFrame{
 		JTable my_propositions = new JTable(new Object[][]{}, ListMovies.head);
 		JTable base = new JTable(movies);
 
-		table.addTab("Mes films", new JScrollPane(my_movies));
+		JPanel personnel_movies = new JPanel(new BorderLayout());
+		JButton add_movie = new JButton("Ajouter un film");
+		add_movie.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+	       		popup.setVisible(true);
+    		}
+		});
+
+		personnel_movies.add(my_movies, BorderLayout.CENTER);
+		personnel_movies.add(add_movie, BorderLayout.NORTH);
+
+		table.addTab("Mes films", new JScrollPane(personnel_movies));
 		table.addTab("Mes recommandations", new JScrollPane(my_propositions));
 		table.addTab("Base de films", new JScrollPane(base));
 
 		this.setContentPane(table);
+
+		popup = new PopupAddMovie(this);
 
 		setPreferredSize(new Dimension(width, height));
 		pack();
