@@ -27,7 +27,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	}
 
 	public void findBarycentre(){
-		int min = 32; // i.e. here 20 mean infinity
+		int min = 32; // i.e. here 32 mean infinity
 		K temp;	
 
 		if (barycentre != null){
@@ -44,13 +44,23 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 			if (barycentre != null){
 				dist += this.list.get(i).dist(barycentre);
-			}				
+				
+				if (dist < min){
+					temp = this.barycentre;
+					barycentre = this.list.get(i);
+					this.list.add(i,temp);
+					min = dist;
+				}			
 
-			if (dist < min){
-				temp = this.barycentre;
-				barycentre = this.list.get(i);
-				this.list.add(i,temp);
-			}
+
+			}else{
+				if (dist < min){
+					barycentre = this.list.get(i);
+					min = dist;
+				}
+			}		
+
+			
 		}
 
 	}
@@ -150,6 +160,10 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		return this.barycentre;
 	}
 
+	public ArrayList<K> getList(){
+		return this.list;
+	}
+
 	public void addMovie(K newmovie){
 		this.list.add(newmovie);
 		fireTableDataChanged();
@@ -175,12 +189,14 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 	public void sort(int numberMovies, int number){
 		ArrayList<ListMovies> sortedlist = new ArrayList<ListMovies>();
+		ArrayList<Movie> buffer = new ArrayList<Movie>();
 		ArrayList<Integer> randomnumber = new ArrayList<Integer>();
 		int classe[] = new int[this.list.size()];
 		 
 		int i = 0;
 		int j = 0;
 		double distance = 32;
+		double temp = 0;
 		int current_classe = 0;	
 		int nb = 0;
 
@@ -202,8 +218,9 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			distance = 32;
 			if (!randomnumber.contains(i)){
 				for (j = 0; j < randomnumber.size(); j++){
-					if (distance < 	this.list.get(i).dist(sortedlist.get(j).barycentre)){
-						distance = this.list.get(i).dist(sortedlist.get(j).barycentre);
+					temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
+					if (distance < 	temp){
+						distance = temp;
 						current_classe = j;
 					}
 				}
@@ -222,8 +239,9 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			for(i = 0 ; i < this.list.size(); i++){
 				distance = 32;
 				for (j = 0; j < number; j++){
-					if (this.list.get(i).dist(sortedlist.get(j).barycentre) < distance){
-						distance = this.list.get(i).dist(sortedlist.get(j).barycentre);
+					temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
+					if (temp < distance){
+						distance = temp;
 						current_classe = j;
 					}
 				}
@@ -236,7 +254,54 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 				}
 
 			}
+
 		}while(nb != 0);
+
+		
+		for (i = 0 ; i < number; i++){
+				if (sortedlist.get(i).list.size() != numberMovies - 1){
+					nb = 1;
+			}
+		}
+
+		if (nb == 1){
+			for (i = 0; i < number;i++){
+				if (sortedlist.get(i).list.size() > numberMovies - 1){
+					for (j = numberMovies - 1; j < sortedlist.get(i).list.size(); j++){
+						buffer.add((Movie)sortedlist.get(i).list.get(j));
+						sortedlist.get(i).list.remove(j);
+					}
+					sortedlist.get(i).findBarycentre();
+				}
+			}
+
+			for (i = 0; i < number;i++){
+				while(sortedlist.get(i).list.size() < numberMovies - 1){	
+					distance = 32;
+					for (j = 0; j < buffer.size(); j++){
+						temp = buffer.get(j).dist(sortedlist.get(i).barycentre);
+						if(temp < distance){
+							distance = temp;
+							current_classe = j;
+						}
+					}
+					sortedlist.get(i).list.add(buffer.get(current_classe));
+					buffer.remove(classe);
+				} 
+				sortedlist.get(i).findBarycentre();
+			}
+		}
+
+		for (i = 0; i < sortedlist.size(); i ++){
+			for (j = 0; j < sortedlist.get(i).list.size();j++){
+				current_classe = i*number + j;
+				this.list.remove(current_classe);
+				this.list.add(current_classe,(K)sortedlist.get(i).list.get(j)); 
+			}
+		}
+
+		
+	
 	}
 
 }
