@@ -1,13 +1,12 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.table.AbstractTableModel;
 import model.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ListMovies<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
 	private static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Réalisateur", "Type", "Acteurs", "Genre", "Description"};
@@ -28,14 +27,24 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	}
 
 	public void findBarycentre(){
-		int min = 20; // i.e. here 20 mean infinity
-		K temp;		
+		int min = 32; // i.e. here 20 mean infinity
+		K temp;	
 
-		for (int i =0 ; i < this.list.size(); i++){
+		if (barycentre != null){
+			min = 0;			
+			for (int i = 0 ; i < this.list.size(); i++){
+				min += this.barycentre.dist(list.get(i));
+			}
+		}	
+
+		for (int i = 0 ; i < this.list.size(); i++){
 			int dist = 0;			
 			for (int j = 0; j < this.list.size(); j++){
-				dist += list.get(i).dist(list.get(j));
+				dist += this.list.get(i).dist(list.get(j));
 			}
+			if (barycentre != null){
+				dist += this.list.get(i).dist(barycentre);
+			}				
 
 			if (dist < min){
 				temp = this.barycentre;
@@ -163,5 +172,71 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
     public Object getValueAt(int rowIndex, int columnIndex) {
         return ((Movie)list.get(rowIndex)).toObjectTable()[columnIndex];
     }
+
+	public void sort(int numberMovies, int number){
+		ArrayList<ListMovies> sortedlist = new ArrayList<ListMovies>();
+		ArrayList<Integer> randomnumber = new ArrayList<Integer>();
+		int classe[] = new int[this.list.size()];
+		 
+		int i = 0;
+		int j = 0;
+		double distance = 32;
+		int current_classe = 0;	
+		int nb = 0;
+
+		while(i != number){
+			Random rand = new Random();
+			int randomNumber = rand.nextInt(numberMovies);
+				if (!randomnumber.contains(randomNumber)){
+					randomnumber.add(randomNumber);
+					i++;
+				}
+		}
+
+		for (i = 0; i < number; i++){
+			sortedlist.add(new ListMovies(this.list.get(randomnumber.get(i))));
+			classe[randomnumber.get(i)] = i;
+		}
+
+		for (i = 0; i < this.list.size(); i++){
+			distance = 32;
+			if (!randomnumber.contains(i)){
+				for (j = 0; j < randomnumber.size(); j++){
+					if (distance < 	this.list.get(i).dist(sortedlist.get(j).barycentre)){
+						distance = this.list.get(i).dist(sortedlist.get(j).barycentre);
+						current_classe = j;
+					}
+				}
+				sortedlist.get(current_classe).addMovie(this.list.get(i));
+				classe[i]= current_classe;
+			}
+		}
+
+		do{
+			for (i = 0 ; i < number ; i++){
+				sortedlist.get(i).findBarycentre();
+			}
+
+			nb = 0;
+			
+			for(i = 0 ; i < this.list.size(); i++){
+				distance = 32;
+				for (j = 0; j < number; j++){
+					if (this.list.get(i).dist(sortedlist.get(j).barycentre) < distance){
+						distance = this.list.get(i).dist(sortedlist.get(j).barycentre);
+						current_classe = j;
+					}
+				}
+
+				if (classe[i] != current_classe){
+					nb ++;
+					sortedlist.get(classe[i]).list.remove(this.list.get(i));
+					sortedlist.get(current_classe).list.add(this.list.get(i));
+					classe[i] = current_classe;
+				}
+
+			}
+		}while(nb != 0);
+	}
 
 }
