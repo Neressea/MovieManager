@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Table <K extends Movie, V extends Barycentrable<K>> implements Barycentrable<K>{
 	private ArrayList<Duo<K, V>> liste;
 
-	public Table(ListMovies newlist, int number, int numberMovies){
-		this.liste = new ArrayList<Duo<K, V>>();
+	public Table(ListMovies<K> newlist, int number, int numberMovies){
+		/*this.liste = new ArrayList<Duo<K, V>>();
 		for (int i = 0; i < number ; i ++){
 			ListMovies temp = new ListMovies();
 			for (int j = 0; j < numberMovies; j ++){
@@ -18,10 +18,9 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 
 			if (!temp.getList().isEmpty()){
 				temp.findBarycentre();
-				this.liste.add(new Duo(temp));
+				this.liste.add(new Duo<K, V>(temp));
 			}
-			
-		}
+		}*/
 	}
 
 	public Table(){

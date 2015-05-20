@@ -188,8 +188,8 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
     }
 
 	public void sort(int numberMovies, int number){
-		ArrayList<ListMovies> sortedlist = new ArrayList<ListMovies>();
-		ArrayList<Movie> buffer = new ArrayList<Movie>();
+		ArrayList<ListMovies<K>> sortedlist = new ArrayList<ListMovies<K>>();
+		ArrayList<K> buffer = new ArrayList<K>();
 		ArrayList<Integer> randomnumber = new ArrayList<Integer>();
 		int classe[] = new int[this.list.size()];
 		 
@@ -210,7 +210,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 
 		for (i = 0; i < number; i++){
-			sortedlist.add(new ListMovies(this.list.get(randomnumber.get(i))));
+			sortedlist.add(new ListMovies<K>(this.list.get(randomnumber.get(i))));
 			classe[randomnumber.get(i)] = i;
 		}
 
@@ -268,7 +268,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			for (i = 0; i < number;i++){
 				if (sortedlist.get(i).list.size() > numberMovies - 1){
 					for (j = numberMovies - 1; j < sortedlist.get(i).list.size(); j++){
-						buffer.add((Movie)sortedlist.get(i).list.get(j));
+						buffer.add(sortedlist.get(i).list.get(j));
 						sortedlist.get(i).list.remove(j);
 					}
 					sortedlist.get(i).findBarycentre();
@@ -296,12 +296,34 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			for (j = 0; j < sortedlist.get(i).list.size();j++){
 				current_classe = i*number + j;
 				this.list.remove(current_classe);
-				this.list.add(current_classe,(K)sortedlist.get(i).list.get(j)); 
+				K m = sortedlist.get(i).list.get(j);
+				this.list.add(current_classe, m); 
 			}
 		}
 
 		
 	
+	}
+
+	/**
+	* Retourne une liste de propositions en fonction de la liste de films qui se trouve dans la base, des films déjà vus par
+	* l'utilisateur, du nombre de recommandations désirées et de la distance maximale entre les films vus et les propositions.
+	*/
+	public static ListMovies<Movie> getPropositions(ListMovies<Movie> movies_base, ListMovies<Movie> viewed, int number_max_of_film, int distance_max){
+		
+		//On récupère le barycentre des films déjà vus par l'utilisateur avec viewed.getBarycentre(). Il faudra le créer avant avec findBarycentre().
+
+		//On trie la liste pour créer les tables.
+
+		//Appelle le constructeur Table pour construire l'architecture des tables à partir de la liste.
+
+		//On parcourt les tables en comparant les barycentres avec le barycentre utilisateur pour trouver la liste de
+		//films qui correspondent le plus à ses attentes. 
+
+		//On vérifie que la taille de la liste ne dépasse pas le nombre max de films et la distance. Si c'est le cas, il faut créer une
+		//nouvelle liste.
+
+		return null;
 	}
 
 }
