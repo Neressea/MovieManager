@@ -102,12 +102,20 @@ public class Movie{
 	* @return The distance between the two movies
 	*/
 	public double dist(Movie m){
+		System.out.println("DIST   "+m);
 		double dist = 0;
 
-		dist+=(title.matches("*"+m.title+"*") || m.title.matches("*"+title+"*")) ? 0 : 16;
-		dist+=(true) ? 0 : 8.0 / kinds.size();
-		dist+=(director.equals(m.director)) ? 0 : 4;
-		dist+=(true) ? 0 : 2.0 / actors.size();
+		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 16;
+
+		if(kinds != null)
+			dist+=(true) ? 0 : 8.0 / kinds.size();
+
+		if(director != null)
+			dist+=(director.equals(m.director)) ? 0 : 4;
+
+		if(actors != null)
+			dist+=(true) ? 0 : 2.0 / actors.size();
+
 		dist+=(type.equals(m.type)) ? 0 : 1;
 
 		return dist;

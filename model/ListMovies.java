@@ -22,7 +22,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 	public ListMovies(K movie){
 		super();
-		ArrayList<K> list = new ArrayList<K>();
+		list = new ArrayList<K>();
 		barycentre = movie;
 	}
 
@@ -165,8 +165,11 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	}
 
 	public void addMovie(K newmovie){
+		System.out.println("ADD     "+list+"\n");
 		this.list.add(newmovie);
+		System.out.println("Pass1\n");
 		fireTableDataChanged();
+		System.out.println("Pass2\n");
 	}
 
 	//Inherited by AbstractTableModel
@@ -187,7 +190,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
         return ((Movie)list.get(rowIndex)).toObjectTable()[columnIndex];
     }
 
-	public ArrayList<ListMovies<K>> sort(int numberMovies, int number){
+	public ArrayList<ListMovies<K>> sort(int total_movies, int numberMovies, int number){
 		ArrayList<ListMovies<K>> sortedlist = new ArrayList<ListMovies<K>>();
 		ArrayList<K> buffer = new ArrayList<K>();
 		ArrayList<Integer> randomnumber = new ArrayList<Integer>();
@@ -200,13 +203,12 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		int current_classe = 0;	
 		int nb = 0;
 
-		while(i != number){
+		while(i < number){
 			Random rand = new Random();
-			int randomNumber = rand.nextInt(numberMovies);
-				if (!randomnumber.contains(randomNumber)){
-					randomnumber.add(randomNumber);
-					i++;
-				}
+			int randomNumber = rand.nextInt(total_movies);
+			while(randomnumber.contains(randomNumber)) randomNumber = rand.nextInt(total_movies);
+			randomnumber.add(randomNumber);
+			i++;
 		}
 
 		for (i = 0; i < number; i++){
@@ -305,7 +307,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	public static ListMovies<Movie> getPropositions(ListMovies<Movie> movies_base, ListMovies<Movie> viewed, int number_max_of_film, int distance_max){
 		Movie ref = viewed.getBarycentre();
 		//On récupère le barycentre des films déjà vus par l'utilisateur avec viewed.getBarycentre(). Il faudra le créer avant avec findBarycentre().
-		ArrayList<ListMovies<Movie>> temp = movies_base.sort(7,14);
+		ArrayList<ListMovies<Movie>> temp = movies_base.sort(movies_base.getList().size(), 7,14);
 		
 		//On trie la liste pour créer les tables.		
 		
@@ -335,6 +337,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			for (int i = 0 ; i < 7; i ++){
 				double test = 32;
 
+				System.out.println("REF" + ref+" \n");
 				double dist_test = ref.dist(data.get(i).getBarycentre());
 			
 				if (dist_test < test && forbid.get(indice).size() < 3){		

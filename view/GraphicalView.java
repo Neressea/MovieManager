@@ -79,6 +79,11 @@ public class GraphicalView extends JFrame{
             }
 		};
 
+		JPanel proposition_panel = new JPanel(new BorderLayout());
+		proposition_panel.add(my_propositions, BorderLayout.CENTER);
+		ButtonsPanel panel_buttons = new ButtonsPanel(my_propositions, movies_base, movies_perso, movies_base.getList().size());
+		proposition_panel.add(panel_buttons, BorderLayout.NORTH);
+
 		base = new JTable(movies_base){
 			//Implement table cell tool tips.           
             public String getToolTipText(MouseEvent e) {
@@ -109,7 +114,7 @@ public class GraphicalView extends JFrame{
 		personnel_movies.add(new JScrollPane(my_movies), BorderLayout.CENTER);
 
 		table.addTab("Mes films", personnel_movies);
-		table.addTab("Mes recommandations", new JScrollPane(my_propositions));
+		table.addTab("Mes recommandations", new JScrollPane(proposition_panel));
 		table.addTab("Base de films", new JScrollPane(base));
 
 		this.setContentPane(table);
