@@ -102,7 +102,6 @@ public class Movie{
 	* @return The distance between the two movies
 	*/
 	public double dist(Movie m){
-		System.out.println("DIST   "+m);
 		double dist = 0;
 
 		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 16;
@@ -120,6 +119,8 @@ public class Movie{
 
 		return dist;
 	}
+
+	public String getTitle(){return title;}
 
 	public Object[] toObjectTable(){
 		return new Object[]{id, title, year, duration, director, type, actors, kinds, description};

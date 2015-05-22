@@ -27,7 +27,12 @@ public class ButtonsPanel extends JPanel{
 		launch.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				ListMovies<Movie> movies = ListMovies.getPropositions(movies_base, movies_viewed, (Integer) combo_nb.getSelectedItem(), 0);
-				my_propositions.setModel(movies);
+				if(movies != null)
+					my_propositions.setModel(movies);
+				else{
+					//Il n'y a pas de films entrés
+					JOptionPane.showMessageDialog((JButton) arg0.getSource(), "Entrez des films pour recevoir des propositions !", "Erreur durant le processus", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
