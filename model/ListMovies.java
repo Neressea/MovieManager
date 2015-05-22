@@ -187,7 +187,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
         return ((Movie)list.get(rowIndex)).toObjectTable()[columnIndex];
     }
 
-	public void sort(int numberMovies, int number){
+	public ArrayList<ListMovies<K>> sort(int numberMovies, int number){
 		ArrayList<ListMovies<K>> sortedlist = new ArrayList<ListMovies<K>>();
 		ArrayList<K> buffer = new ArrayList<K>();
 		ArrayList<Integer> randomnumber = new ArrayList<Integer>();
@@ -292,14 +292,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 		}
 
-		for (i = 0; i < sortedlist.size(); i ++){
-			for (j = 0; j < sortedlist.get(i).list.size();j++){
-				current_classe = i*number + j;
-				this.list.remove(current_classe);
-				K m = sortedlist.get(i).list.get(j);
-				this.list.add(current_classe, m); 
-			}
-		}
+		return sortedlist;
 
 		
 	
@@ -310,12 +303,75 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	* l'utilisateur, du nombre de recommandations désirées et de la distance maximale entre les films vus et les propositions.
 	*/
 	public static ListMovies<Movie> getPropositions(ListMovies<Movie> movies_base, ListMovies<Movie> viewed, int number_max_of_film, int distance_max){
-		
+		Movie ref = viewed.getBarycentre();
 		//On récupère le barycentre des films déjà vus par l'utilisateur avec viewed.getBarycentre(). Il faudra le créer avant avec findBarycentre().
+		ArrayList<ListMovies<Movie>> temp = movies_base.sort(7,14);
+		
+		//On trie la liste pour créer les tables.		
+		
+		ArrayList<Table<Movie, ListMovies<Movie>>> data = new ArrayList<Table<Movie, ListMovies<Movie>>>();
+		
+		ListMovies<Movie> prop = new ListMovies<Movie>();
 
-		//On trie la liste pour créer les tables.
+		ArrayList<ArrayList<Integer>> forbid = new ArrayList<ArrayList<Integer>>();
+
+		for (int i = 0 ; i < 7 ; i ++){
+			data.add(new Table<Movie,ListMovies<Movie>>());
+			
+			for (int j = 0; j < 3; j ++){
+				data.get(i).addList(temp.get(j));
+			}
+		}
 
 		//Appelle le constructeur Table pour construire l'architecture des tables à partir de la liste.
+
+		int current_number = 0;
+
+		while(current_number < number_max_of_film){
+
+			int indice = 0;
+			int indice_bis = 0;
+
+			for (int i = 0 ; i < 7; i ++){
+				double test = 32;
+
+				double dist_test = ref.dist(data.get(i).getBarycentre());
+			
+				if (dist_test < test && forbid.get(indice).size() < 3){		
+					indice = i;
+					test = dist_test;
+				}
+			}
+
+			for (int i = 0 ; i < 3; i ++){
+				double test = 32;
+
+				Duo<Movie,ListMovies<Movie>> atest = data.get(indice).getListe().get(i);
+
+				double dist_test = ref.dist(atest.getK());
+			
+				if (dist_test < test && !(forbid.get(indice).contains(i))){		
+					indice_bis = i;
+					test = dist_test;
+				}
+			}
+
+			prop.addMovie(data.get(indice).getListe().get(indice_bis).getK());
+			current_number ++;
+
+			for (int i = 0; i < data.get(indice).getListe().get(indice_bis).getV().getList().size(); i ++){
+				
+				if (current_number < number_max_of_film){
+					prop.addMovie(data.get(indice).getListe().get(indice_bis).getV().getList().get(i));
+					current_number ++;
+				}
+			}
+
+			forbid.add(indice, new ArrayList<Integer>());
+			forbid.get(indice).add(indice_bis);
+		}
+
+		
 
 		//On parcourt les tables en comparant les barycentres avec le barycentre utilisateur pour trouver la liste de
 		//films qui correspondent le plus à ses attentes. 
@@ -323,7 +379,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		//On vérifie que la taille de la liste ne dépasse pas le nombre max de films et la distance. Si c'est le cas, il faut créer une
 		//nouvelle liste.
 
-		return null;
+		return prop;
 	}
 
 }

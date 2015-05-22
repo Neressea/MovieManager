@@ -6,21 +6,7 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 	private ArrayList<Duo<K, V>> liste;
 
 	public Table(ListMovies<K> newlist, int number, int numberMovies){
-		/*this.liste = new ArrayList<Duo<K, V>>();
-		for (int i = 0; i < number ; i ++){
-			ListMovies temp = new ListMovies();
-			for (int j = 0; j < numberMovies; j ++){
-				
-				if (i*number+j < newlist.getRowCount()){
-					temp.addMovie((Movie)newlist.getList().get(i*number+j));
-				}
-			}
 
-			if (!temp.getList().isEmpty()){
-				temp.findBarycentre();
-				this.liste.add(new Duo<K, V>(temp));
-			}
-		}*/
 	}
 
 	public Table(){
@@ -29,6 +15,10 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 
 	public void addValue(Duo<K, V> newduo){
 		this.liste.add(newduo);
+	}
+
+	public void addList(V newlist){
+		this.addValue(new Duo<K, V>(newlist));
 	}
 
 	/*public void addValueDuo(Table newtable, int i){
@@ -51,6 +41,10 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 		temp.findBarycentre();
 
 		return temp.getBarycentre();
+	}
+
+	public ArrayList<Duo<K, V>> getListe(){
+		return this.liste;
 	}
 
 
