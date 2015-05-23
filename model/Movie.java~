@@ -104,18 +104,18 @@ public class Movie{
 	public double dist(Movie m){
 		double dist = 0;
 
-		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 80.0;
+		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 16;
 
 		if(kinds != null)
-			dist+=(true) ? 0 : 40.0 / kinds.size();
+			dist+=(true) ? 0 : 8.0 / kinds.size();
 
 		if(director != null)
-			dist+=(director.equals(m.director)) ? 0 : 20.0;
+			dist+=(director.equals(m.director)) ? 0 : 4;
 
 		if(actors != null)
-			dist+=(true) ? 0 : 10.0 / actors.size();
+			dist+=(true) ? 0 : 2.0 / actors.size();
 
-		dist+=(type.equals(m.type)) ? 0 : 5.0;
+		dist+=(type.equals(m.type)) ? 0 : 1;
 
 		return dist;
 	}

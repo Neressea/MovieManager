@@ -27,7 +27,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	}
 
 	public void findBarycentre(){
-		int min = 32; // i.e. here 32 mean infinity
+		int min = 156; // i.e. here 156 mean infinity
 		K temp;	
 
 		if (barycentre != null){
@@ -133,6 +133,17 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 	}
 
+	public void affiche_solve(ArrayList<ListMovies<K>> result){
+		for (int i = 0; i < result.size(); i++){
+			System.out.println("Contenu de la liste"+i);
+			System.out.println("Barycentre :"+result.get(i).barycentre.getTitle());
+			for (int j = 0; j < result.get(i).getList().size(); j++){
+				System.out.println(result.get(i).getList().get(j).getTitle());
+			}
+		}
+
+	}
+
 	public String toJson(){
 		String json="{\"barycentre\":";
 		json+= (barycentre != null) ? barycentre.toJson() : "\"null\"";
@@ -200,6 +211,8 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		int current_classe = 0;	
 		int nb = 0;
 
+		int tour_max = 200;
+
 		while(i < number){
 			Random rand = new Random();
 			int randomNumber = rand.nextInt(total_movies);
@@ -214,11 +227,11 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 
 		for (i = 0; i < this.list.size(); i++){
-			distance = 32;
+			distance = 156;
 			if (!randomnumber.contains(i)){
-				for (j = 0; j < randomnumber.size(); j++){
+				for (j = 0; j < number; j++){
 					temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
-					if (distance < 	temp){
+					if (temp < distance && sortedlist.get(j).getList().size() < numberMovies - 1){
 						distance = temp;
 						current_classe = j;
 					}
@@ -228,6 +241,8 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 		}
 
+		//affiche_solve(sortedlist);
+
 		do{
 			for (i = 0 ; i < number ; i++){
 				sortedlist.get(i).findBarycentre();
@@ -236,7 +251,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			nb = 0;
 			
 			for(i = 0 ; i < this.list.size(); i++){
-				distance = 32;
+				distance = this.list.get(i).dist(sortedlist.get(classe[i]).barycentre);
 				for (j = 0; j < number; j++){
 					temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
 					if (temp < distance){
@@ -254,16 +269,12 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 			}
 
-		}while(nb != 0);
+			tour_max--;
 
-		for (int w=0; w<sortedlist.size(); w++) {
-			System.out.println("SIZE !! " +sortedlist.get(w).list.size());
-			for (int g=0; g<sortedlist.get(w).list.size(); g++) {
-				System.out.println(sortedlist.get(w).list.get(g).getTitle());
-			}
-			System.out.println(w);
-		}
-		
+		}while(nb != 0 && tour_max > 0);
+
+		affiche_solve(sortedlist);		
+
 		for (i = 0 ; i < number; i++){
 				if (sortedlist.get(i).list.size() != numberMovies - 1){
 					nb = 1;
@@ -286,7 +297,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 			for (i = 0; i < number;i++){
 				while(sortedlist.get(i).list.size() < numberMovies - 1){	
-					distance = 32;
+					distance = 156;
 					for (j = 0; j < buffer.size(); j++){
 						temp = buffer.get(j).dist(sortedlist.get(i).barycentre);
 						if(temp < distance){
@@ -322,7 +333,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		viewed.findBarycentre();
 		Movie ref = viewed.getBarycentre();
 		//On récupère le barycentre des films déjà vus par l'utilisateur avec viewed.getBarycentre(). Il faudra le créer avant avec findBarycentre().
-		ArrayList<ListMovies<Movie>> temp = movies_base.sort(movies_base.getList().size(), 7,14);
+		ArrayList<ListMovies<Movie>> temp = movies_base.sort(movies_base.getList().size(), 14,7);
 		
 		//On trie la liste pour créer les tables.		
 		
@@ -354,7 +365,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			int indice_bis = 0;
 
 			for (int i = 0 ; i < 7; i ++){
-				double test = 32;
+				double test = 156;
 
 				double dist_test = ref.dist(data.get(i).getBarycentre());
 			
@@ -365,7 +376,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 
 			for (int i = 0 ; i < 3; i ++){
-				double test = 32;
+				double test = 156;
 
 				Duo<Movie,ListMovies<Movie>> atest = data.get(indice).getListe().get(i);
 
