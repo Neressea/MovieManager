@@ -106,14 +106,20 @@ public class Movie{
 
 		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 80.0;
 
-		if(kinds != null)
-			dist+=(true) ? 0 : 40.0 / kinds.size();
+		if(kinds != null){
+			for (int i=0; i<kinds.size(); i++) {
+				dist+=(kinds.contains(m.kinds.get(i))) ? 0 : 40.0 / kinds.size();	
+			}
+		}
 
 		if(director != null)
 			dist+=(director.equals(m.director)) ? 0 : 20.0;
 
-		if(actors != null)
-			dist+=(true) ? 0 : 10.0 / actors.size();
+		if(actors != null){
+			for (int i=0; i<actors.size(); i++) {
+				dist+=(actors.contains(m.actors.get(i))) ? 0 : 10.0 / actors.size();	
+			}
+		}
 
 		dist+=(type.equals(m.type)) ? 0 : 5.0;
 
