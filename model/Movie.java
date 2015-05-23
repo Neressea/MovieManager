@@ -109,14 +109,14 @@ public class Movie{
 		if(kinds != null && m.kinds != null){
 			ArrayList<String> forbid = new ArrayList<String>();
 			for (int i=0; i<kinds.size(); i++) {
-				if(m.kinds.contains(kinds.get(i))){
+				if(!m.kinds.contains(kinds.get(i))){
 					dist+=40.0 / kinds.size();	
 					forbid.add(kinds.get(i));
 				}
 			}
 
 			for (int i=0; i<m.kinds.size(); i++) {
-				if(kinds.contains(m.kinds.get(i)) && !forbid.contains(m.kinds.get(i))){
+				if(!kinds.contains(m.kinds.get(i)) && !forbid.contains(m.kinds.get(i))){
 					dist+=40.0 / m.kinds.size();
 				}
 			}
@@ -128,14 +128,14 @@ public class Movie{
 		if(actors != null){
 			ArrayList<String> forbid = new ArrayList<String>();
 			for (int i=0; i<m.actors.size(); i++) {
-				if(actors.contains(m.actors.get(i))){
+				if(!actors.contains(m.actors.get(i))){
 					dist+=10.0 / actors.size();	
 					forbid.add(m.actors.get(i));
 				}
 			}
 
 			for (int i=0; i<actors.size(); i++) {
-				if(m.actors.contains(actors.get(i))){
+				if(!m.actors.contains(actors.get(i))){
 					dist+=10.0 / m.actors.size();	
 				}
 			}
