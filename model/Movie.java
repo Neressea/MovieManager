@@ -106,9 +106,19 @@ public class Movie{
 
 		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 80.0;
 
-		if(kinds != null){
+		if(kinds != null && m.kinds != null){
+			ArrayList<String> forbid = new ArrayList<String>();
 			for (int i=0; i<kinds.size(); i++) {
-				dist+=(kinds.contains(m.kinds.get(i))) ? 0 : 40.0 / kinds.size();	
+				if(m.kinds.contains(kinds.get(i))){
+					dist+=40.0 / kinds.size();	
+					forbid.add(kinds.get(i));
+				}
+			}
+
+			for (int i=0; i<m.kinds.size(); i++) {
+				if(kinds.contains(m.kinds.get(i)) && !forbid.contains(m.kinds.get(i))){
+					dist+=40.0 / m.kinds.size();
+				}
 			}
 		}
 
@@ -116,8 +126,18 @@ public class Movie{
 			dist+=(director.equals(m.director)) ? 0 : 20.0;
 
 		if(actors != null){
+			ArrayList<String> forbid = new ArrayList<String>();
+			for (int i=0; i<m.actors.size(); i++) {
+				if(actors.contains(m.actors.get(i))){
+					dist+=10.0 / actors.size();	
+					forbid.add(m.actors.get(i));
+				}
+			}
+
 			for (int i=0; i<actors.size(); i++) {
-				dist+=(actors.contains(m.actors.get(i))) ? 0 : 10.0 / actors.size();	
+				if(m.actors.contains(actors.get(i))){
+					dist+=10.0 / m.actors.size();	
+				}
 			}
 		}
 
