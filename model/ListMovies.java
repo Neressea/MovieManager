@@ -276,7 +276,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 		}while(nb != 0 && tour_max > 0);
 
-		//affiche_solve(sortedlist, classe);
+		affiche_solve(sortedlist, classe);
 
 		for (i = 0 ; i < number; i ++){
 			for (j = 1 ; j < sortedlist.get(i).getList().size();j++){
@@ -284,7 +284,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 				K buf = sortedlist.get(i).getList().get(j);
 				temp = 	buf.dist(sortedlist.get(i).barycentre);			
 				for (int k = 0; k < j; k++){
-					if (temp < sortedlist.get(i).getList().get(k).dist(sortedlist.get(i).barycentre) && nb == 1);{
+					if (temp < sortedlist.get(i).getList().get(k).dist(sortedlist.get(i).barycentre) && nb == 0);{
 						sortedlist.get(i).getList().set(j, sortedlist.get(i).getList().get(k));
 						sortedlist.get(i).getList().set(k, buf);
 						nb = 1;
@@ -293,7 +293,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 		}
 
-		affiche_solve(sortedlist, classe);		
+		//affiche_solve(sortedlist, classe);		
 
 		for (i = 0 ; i < number; i++){
 				if (sortedlist.get(i).list.size() != numberMovies - 1){
