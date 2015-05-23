@@ -27,7 +27,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	}
 
 	public void findBarycentre(){
-		int min = 156; // i.e. here 156 mean infinity
+		int min = 300; // i.e. here 300 means infinity
 		K temp;	
 
 		if (this.barycentre == null){
@@ -127,17 +127,13 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		int temp = 0;		
 
 		for (int i = 0; i < result.size(); i++){
-			System.out.println("Contenu de la liste"+i);
+			System.out.println("Contenu de la liste :"+i+" de taille "+result.get(i).list.size());
 			System.out.println("Barycentre :"+result.get(i).barycentre.getTitle());
 			temp += result.get(i).getList().size();
 			for (int j = 0; j < result.get(i).getList().size(); j++){
 				System.out.println(result.get(i).getList().get(j).getTitle()+result.get(i).getList().get(j).dist(result.get(i).barycentre));
 			}
 		}
-
-		/*for (int i = 0 ; i < this.list.size(); i++){
-			System.out.println(list.get(i).getTitle()+" " +classe[i]);
-		} */
 
 		System.out.println("TOTAL" + temp);
 
@@ -197,6 +193,32 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
         return ((Movie)list.get(rowIndex)).toObjectTable()[columnIndex];
     }
 
+
+	public void trier_dist_barycentre(){
+		int tour_max = this.list.size();
+		ArrayList<K> buffer = new ArrayList<K>();
+		double distance;
+		double temp;
+		int current_classe = 0;
+
+		for (int j = 0 ; j < tour_max; j++){			
+			distance = 300;
+			current_classe = 0;
+			for (int k = 0; k < this.list.size(); k++){
+				K buf = this.list.get(k);
+				temp = buf.dist(this.barycentre);
+				if (temp < distance){
+					distance = temp;
+					current_classe = k;
+				}
+			}
+			buffer.add(this.list.get(current_classe));
+			this.list.remove(current_classe);	
+		}
+		this.list = buffer;
+		
+	}
+
 	public ArrayList<ListMovies<K>> sort(int total_movies, int numberMovies, int number){
 		ArrayList<ListMovies<K>> sortedlist = new ArrayList<ListMovies<K>>();
 		ArrayList<K> buffer = new ArrayList<K>();
@@ -205,6 +227,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		 
 		int i = 0;
 		int j = 0;
+		int k = 0;
 		double distance = 32;
 		double temp = 0;
 		int current_classe = 0;	
@@ -225,7 +248,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 
 		for (i = 0; i < this.list.size(); i++){
-			distance = 156;
+			distance = 300;
 			if (!randomnumber.contains(i)){
 				for (j = 0; j < number; j++){
 					temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
@@ -276,24 +299,11 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 		}while(nb != 0 && tour_max > 0);
 
-		affiche_solve(sortedlist, classe);
-
 		for (i = 0 ; i < number; i ++){
-			for (j = 1 ; j < sortedlist.get(i).getList().size();j++){
-				nb = 0;				
-				K buf = sortedlist.get(i).getList().get(j);
-				temp = 	buf.dist(sortedlist.get(i).barycentre);			
-				for (int k = 0; k < j; k++){
-					if (temp < sortedlist.get(i).getList().get(k).dist(sortedlist.get(i).barycentre) && nb == 0);{
-						sortedlist.get(i).getList().set(j, sortedlist.get(i).getList().get(k));
-						sortedlist.get(i).getList().set(k, buf);
-						nb = 1;
-					}
-				}
-			}
+			sortedlist.get(i).trier_dist_barycentre();
 		}
 
-		//affiche_solve(sortedlist, classe);		
+		affiche_solve(sortedlist, classe);		
 
 		for (i = 0 ; i < number; i++){
 				if (sortedlist.get(i).list.size() != numberMovies - 1){
@@ -318,6 +328,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			for (i = 0; i < number;i++){
 				while(sortedlist.get(i).list.size() < numberMovies - 1){	
 					distance = 156;
+					current_classe = 0;
 					for (j = 0; j < buffer.size(); j++){
 						temp = buffer.get(j).dist(sortedlist.get(i).barycentre);
 						if(temp < distance){
@@ -326,18 +337,14 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 						}
 					}
 					sortedlist.get(i).list.add(buffer.get(current_classe));
-					buffer.remove(classe);
+					buffer.remove(current_classe);
 				} 
 				sortedlist.get(i).findBarycentre();
 			}
 
 		}
 
-		/*for (int w=0; w<sortedlist.size(); w++) {
-			for (int g=0; g<sortedlist.get(w).getList().size() && sortedlist != null; g++) {
-				System.out.println(sortedlist.get(w).list.get(g));
-			}
-		}*/
+		//affiche_solve(sortedlist, classe);
 
 		return sortedlist;
 	
@@ -348,6 +355,10 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	* l'utilisateur, du nombre de recommandations désirées et de la distance maximale entre les films vus et les propositions.
 	*/
 	public static ListMovies<Movie> getPropositions(ListMovies<Movie> movies_base, ListMovies<Movie> viewed, int number_max_of_film, int distance_max){
+
+		int numberofmiddleTable = 2;
+		int sizeofmiddleTable = 4;
+
 		if(viewed == null || viewed.getList().size() == 0) return null;
 
 		viewed.findBarycentre();
@@ -363,17 +374,25 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 		ArrayList<ArrayList<Integer>> forbid = new ArrayList<ArrayList<Integer>>(7);
 
-		for (int i=0; i<7; i++) {
+		for (int i=0; i< numberofmiddleTable; i++) {
 			forbid.add(new ArrayList<Integer>());
 		}
 
-		for (int i = 0 ; i < 7 ; i ++){
+		for (int i = 0 ; i < numberofmiddleTable ; i ++){
 			data.add(new Table<Movie,ListMovies<Movie>>());
 			
-			for (int j = 0; j < 3; j ++){
-				data.get(i).addList(temp.get(j));
+			for (int j = 0; j < sizeofmiddleTable; j ++){
+				if (i*j < temp.size()){
+					data.get(i).addList(temp.get(j * i));
+					
+					for (int k =0; k < 14;k ++){
+						System.out.println(data.get(i).getListe().get(j).getV().getList().get(k));	
+					}
+				}
 			}
 		}
+
+		
 
 		//Appelle le constructeur Table pour construire l'architecture des tables à partir de la liste.
 
@@ -384,19 +403,19 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			int indice = 0;
 			int indice_bis = 0;
 
-			for (int i = 0 ; i < 7; i ++){
-				double test = 156;
+			for (int i = 0 ; i < numberofmiddleTable; i ++){
+				double test = 300;
 
 				double dist_test = ref.dist(data.get(i).getBarycentre());
 			
-				if (dist_test < test && forbid.get(indice).size() < 3){		
+				if (dist_test < test && forbid.get(indice).size() < data.get(i).getListe().size()){		
 					indice = i;
 					test = dist_test;
 				}
 			}
 
-			for (int i = 0 ; i < 3; i ++){
-				double test = 156;
+			for (int i = 0 ; i < data.get(indice).getListe().size(); i ++){
+				double test = 300;
 
 				Duo<Movie,ListMovies<Movie>> atest = data.get(indice).getListe().get(i);
 
