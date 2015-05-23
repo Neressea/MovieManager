@@ -209,7 +209,6 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		double temp = 0;
 		int current_classe = 0;	
 		int nb = 0;
-
 		int tour_max = 200;
 
 		while(i < number){
@@ -280,14 +279,15 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		//affiche_solve(sortedlist, classe);
 
 		for (i = 0 ; i < number; i ++){
-			for (j = 0 ; j < sortedlist.get(i).getList().size();j++){
+			for (j = 1 ; j < sortedlist.get(i).getList().size();j++){
+				nb = 0;				
 				K buf = sortedlist.get(i).getList().get(j);
-				temp = 	sortedlist.get(i).getList().get(j).dist(sortedlist.get(i).barycentre);			
+				temp = 	buf.dist(sortedlist.get(i).barycentre);			
 				for (int k = 0; k < j; k++){
-					if (temp < sortedlist.get(i).getList().get(k).dist(sortedlist.get(i).barycentre));{
+					if (temp < sortedlist.get(i).getList().get(k).dist(sortedlist.get(i).barycentre) && nb == 1);{
 						sortedlist.get(i).getList().set(j, sortedlist.get(i).getList().get(k));
 						sortedlist.get(i).getList().set(k, buf);
-						break;
+						nb = 1;
 					}
 				}
 			}
