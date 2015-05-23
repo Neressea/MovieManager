@@ -30,35 +30,24 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		int min = 156; // i.e. here 156 mean infinity
 		K temp;	
 
-		if (barycentre != null){
-			min = 0;			
-			for (int i = 0 ; i < this.list.size(); i++){
-				min += this.barycentre.dist(list.get(i));
-			}
+		if (this.barycentre == null){
+			this.barycentre = this.list.get(0);
 		}	
 
 		for (int i = 0 ; i < this.list.size(); i++){
-			int dist = 0;			
+			int dist = 0;	
+			dist += this.list.get(i).dist(barycentre);		
+			
 			for (int j = 0; j < this.list.size(); j++){
 				dist += this.list.get(i).dist(list.get(j));
 			}
-			if (barycentre != null){
-				dist += this.list.get(i).dist(barycentre);
 				
-				if (dist < min){
-					temp = this.barycentre;
-					barycentre = this.list.get(i);
-					this.list.add(i,temp);
-					min = dist;
-				}			
-
-
-			}else{
-				if (dist < min){
-					barycentre = this.list.get(i);
-					min = dist;
-				}
-			}		
+			if (dist < min){
+				temp = this.barycentre;
+				barycentre = this.list.get(i);
+				this.list.set(i,temp);
+				min = dist;
+			}			
 
 			
 		}
@@ -133,14 +122,24 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 	}
 
-	public void affiche_solve(ArrayList<ListMovies<K>> result){
+	public void affiche_solve(ArrayList<ListMovies<K>> result, int classe[]){
+
+		int temp = 0;		
+
 		for (int i = 0; i < result.size(); i++){
 			System.out.println("Contenu de la liste"+i);
 			System.out.println("Barycentre :"+result.get(i).barycentre.getTitle());
+			temp += result.get(i).getList().size();
 			for (int j = 0; j < result.get(i).getList().size(); j++){
-				System.out.println(result.get(i).getList().get(j).getTitle());
+				System.out.println(result.get(i).getList().get(j).getTitle()+result.get(i).getList().get(j).dist(result.get(i).barycentre));
 			}
 		}
+
+		/*for (int i = 0 ; i < this.list.size(); i++){
+			System.out.println(list.get(i).getTitle()+" " +classe[i]);
+		} */
+
+		System.out.println("TOTAL" + temp);
 
 	}
 
@@ -241,7 +240,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			}
 		}
 
-		//affiche_solve(sortedlist);
+		//affiche_solve(sortedlist, classe);
 
 		do{
 			for (i = 0 ; i < number ; i++){
@@ -252,20 +251,25 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			
 			for(i = 0 ; i < this.list.size(); i++){
 				distance = this.list.get(i).dist(sortedlist.get(classe[i]).barycentre);
-				for (j = 0; j < number; j++){
-					temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
-					if (temp < distance){
-						distance = temp;
-						current_classe = j;
+				
+				if (distance != 0){				
+
+					for (j = 0; j < number; j++){
+						temp = this.list.get(i).dist(sortedlist.get(j).barycentre);
+						if (temp < distance){
+							distance = temp;
+							current_classe = j;
+						}
+					}
+
+					if (classe[i] != current_classe){
+						nb ++;
+						sortedlist.get(classe[i]).list.remove(this.list.get(i));
+						sortedlist.get(current_classe).list.add(this.list.get(i));
+						classe[i] = current_classe;
 					}
 				}
 
-				if (classe[i] != current_classe){
-					nb ++;
-					sortedlist.get(classe[i]).list.remove(this.list.get(i));
-					sortedlist.get(current_classe).list.add(this.list.get(i));
-					classe[i] = current_classe;
-				}
 
 			}
 
@@ -273,7 +277,23 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 		}while(nb != 0 && tour_max > 0);
 
-		affiche_solve(sortedlist);		
+		//affiche_solve(sortedlist, classe);
+
+		for (i = 0 ; i < number; i ++){
+			for (j = 0 ; j < sortedlist.get(i).getList().size();j++){
+				K buf = sortedlist.get(i).getList().get(j);
+				temp = 	sortedlist.get(i).getList().get(j).dist(sortedlist.get(i).barycentre);			
+				for (int k = 0; k < j; k++){
+					if (temp < sortedlist.get(i).getList().get(k).dist(sortedlist.get(i).barycentre));{
+						sortedlist.get(i).getList().set(j, sortedlist.get(i).getList().get(k));
+						sortedlist.get(i).getList().set(k, buf);
+						break;
+					}
+				}
+			}
+		}
+
+		affiche_solve(sortedlist, classe);		
 
 		for (i = 0 ; i < number; i++){
 				if (sortedlist.get(i).list.size() != numberMovies - 1){
