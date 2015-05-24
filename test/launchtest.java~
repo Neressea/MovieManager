@@ -2,10 +2,10 @@ package test;
 
 
 
-public class launchtest(){
+public class launchtest{
 	public static void main(String[] args){
 
-
+	Movie_test.dist_test();
 
 	}
 

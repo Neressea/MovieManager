@@ -2,5 +2,5 @@ javac  -cp gson.jar:. ./model/*.java
 javac -cp jdatepicker.jar:. ./view/*.java
 javac ./controller/*.java
 java -cp jdatepicker.jar:gson.jar:. view.GraphicalView
-javac -cp junit-4.12.jar ./test/*.jar
+javac -cp junit-4.12.jar:gson.jar ./test/*.java
 
