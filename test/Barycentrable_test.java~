@@ -1,0 +1,11 @@
+package model;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class Barycentrable_test{
+	public final void getBarycentre(){
+		fail();
+	};
+}
