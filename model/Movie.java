@@ -42,6 +42,10 @@ public class Movie{
 		return json+"]}";
 	}
 
+	public static Movie fromJson(){
+		return null;
+	}
+
 	public static Movie fromJson(String json){
 		Movie m = new Movie();
 
@@ -149,7 +153,13 @@ public class Movie{
 	public String getTitle(){return title;}
 
 	public Object[] toObjectTable(){
-		return new Object[]{id, title, year, duration, director, type, actors, kinds, description};
+		String act="";
+		String k="";
+
+		for (int i=0; i<actors.size(); i++) act+=(i<actors.size()-1) ? actors.get(i)+", " : actors.get(i);
+		for (int i=0; i<kinds.size(); i++) k+=(i<kinds.size()-1) ? kinds.get(i)+", " : kinds.get(i);
+
+		return new Object[]{id, title, year, duration, director, type, act, k, description};
 	}
 
 	public static void main(String[] args) {

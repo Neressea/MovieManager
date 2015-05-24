@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.*;
+
 public class GraphicalView extends JFrame{
 
 	private PopupAddMovie popup;
@@ -139,7 +142,33 @@ public class GraphicalView extends JFrame{
 		json.addActionListener(new JSONController(this));
 
 		final JMenuItem import_base = new JMenuItem("Importer un fichier de films");
-		import_base.addActionListener(new BaseController());
+		import_base.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+
+				//We get the Json file
+	       		JFileChooser chooser = new JFileChooser();
+	       		FileNameExtensionFilter filtre = new FileNameExtensionFilter("Fichiers JSON", "json");
+	       		chooser.setFileFilter(filtre);
+				int verif = chooser.showOpenDialog(import_base);
+				String  json="";
+
+				if(verif == JFileChooser.APPROVE_OPTION){
+					String file = (chooser.getSelectedFile()).getAbsolutePath();
+					try{
+						String line;
+						BufferedReader bfr = new BufferedReader(new FileReader(new File(file))); 
+						while((line=bfr.readLine()) != null) json += line; //On gère le cas où le json est sur plusieurs lignes
+						bfr.close();
+					}catch(Exception e){
+						//Si le fichier n'a pas été ouverte
+						JOptionPane.showMessageDialog(import_base, "Le fichier n'a pu être lu", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
+	       		ListMovies<Movie> list = ListMovies.fromJson(json);
+	       		System.out.println(list.getBarycentre());
+    		}
+		});
 
 		table.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {

@@ -161,7 +161,9 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 		String [] elems = json.split(":");
 		lm.barycentre = (!elems[1].equals("null")) ? Movie.fromJson(elems[1]) : null;
-		elems = json.split("[");
+		//elems = json.split("[");
+
+		//System.out.println(json.match("\"barycentre\":\".*\""));
 
 		return lm;
 	}
