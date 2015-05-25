@@ -42,28 +42,26 @@ public class TestListMovies {
 		test.addMovie(b);
 		test.addMovie(c);
 		test.addMovie(d);
-		assertTrue("List avec barycentre initialisée",test.sort(4,1,4).size() == 4);
+		assertTrue("List avec barycentre initialisée avec nombre correct de classe",test.sort(4,1,4) == null);
+		assertTrue("List avec barycentre initialisée avec nombre incorrect de classe",test.sort(4,0,1) == null);
+		assertTrue("List avec barycentre initialisée avec nombre incorrect de film total",test.sort(3,1,4) == null);
 		test = new ListMovies<Movie>();
 		test.addMovie(a);
 		test.addMovie(b);
 		test.addMovie(c);
 		test.addMovie(d);
-		test.findBarycentre();
-		assertTrue("List sans barycentre initialisée",test.getBarycentre() == d);
-        
+		assertTrue("List sans barycentre initialisée avec nombre correct de classe",test.sort(4,1,4).size() == 4);
+		assertTrue("List sans barycentre initialisée avec nombre incorrect de classe",test.sort(4,1,3) == null);
+		assertTrue("List sans barycentre initialisée avec nombre incorrect de film total",test.sort(3,1,4) == null);
+		ArrayList<ListMovies<Movie>> temp = test.sort(4,2,2);
+		assertTrue("List sans barycentre initialisée avec nombre correct de classe et liste non vide",temp.size() == 2);
+		assertTrue("List sans barycentre initialisée avec nombre correct de classe et liste non vide",temp.get(0).getList().size() == 1);
+		assertTrue("List sans barycentre initialisée avec nombre correct de classe et liste non vide",temp.get(1).getList().size() == 1);
+		assertTrue("List sans barycentre initialisée avec nombre correct de classe et liste non vide",temp.get(0).getBarycentre() != null);
+		assertTrue("List sans barycentre initialisée avec nombre correct de classe et liste non vide",temp.get(1).getBarycentre() != null);
 
     } 
-	
-	@Test
-	public final void test_load(){
-		
-	}
-	
-	@Test
-	public final void test_fill(){
-		
-	}
-	
+
 	@Test
 	public final void test_toJson(){
 		Movie p = new Movie(0, "Film1", 0, 0, "Rea1", "TV", null , null, null);
