@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 import model.*;
 
-public class test_ListMovies {
+public class TestListMovies {
 	
 	@Test
 	public final void test_findBarycentre(){
