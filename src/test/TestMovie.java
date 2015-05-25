@@ -60,13 +60,16 @@ public class TestMovie {
 	}
 	
 	@Test
-	public final void test_setters(){
-		
-	}
-	
-	@Test
 	public final void test_toObjectTable(){
+		ArrayList<String> kinds = new ArrayList<String>(Arrays.asList(new String[]{"Comédie", "Drame", "Tranche de vie"}));
+		ArrayList<String> actors = new ArrayList<String>(Arrays.asList(new String[]{"Acteur 1", "Acteur 2", "Acteur 3"}));
+		Movie m = new Movie(1, "Titre", 2015, 66, "Mr. Director", "Movie", kinds, actors, "Best. Movie. Ever.");
 		
+		Object[] expected = new Object[]{new Integer(1), "Titre", new Integer(2015), new Integer(66), "Mr. Director", "Movie", "Acteur 1, Acteur 2, Acteur 3", "Comédie, Drame, Tranche de vie", "Best. Movie. Ever."};
+		
+		for (int i = 0; i < expected.length; i++) {
+			assertTrue("Erreur dans toObjectTable() au champ "+i, m.toObjectTable()[i].equals(expected[i]));
+		}
 	}
 
 }
