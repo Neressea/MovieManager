@@ -166,10 +166,10 @@ public class TestListMovies {
 		Movie test_bis = new Movie(2, "Film", 0, 0, "Rea2", "test", null , genre, null);
 		temp.addMovie(test_bis);
 		temp.addMovie(test);
-		assertTrue("", temp.getBarycentre() != null);
+		assertTrue("Barycentre non vide", temp.getBarycentre() != null);
 		temp.trier_dist_barycentre();
-		//assertTrue("Test du test le plus proche",temp.getList().get(0).equals(test));
-		//assertTrue("Test du second le plus proche",temp.getList().get(1).equals(test_bis));
+		assertTrue("Test du test le plus proche",temp.getList().get(1).equals(test));
+		assertTrue("Test du second le plus proche",temp.getList().get(0).equals(test_bis));
 
 	}
 	
