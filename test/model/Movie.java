@@ -12,7 +12,7 @@ public class Movie{
 	private int duration, year;
 	private ArrayList<String> kinds;
 	private ArrayList<String> actors;
-	private String type; //Movie or TV serie
+	private String type; //Movie or TV series
 	private int id;
 
 	public Movie(){}
