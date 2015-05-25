@@ -3,14 +3,16 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
 import org.jdatepicker.impl.*;
-import org.jdatepicker.util.*;
-import org.jdatepicker.*;
 import java.util.*;
 import model.*;
 
 public class PopupAddMovie extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private GraphicalView owner;
 
 	private JPanel container;

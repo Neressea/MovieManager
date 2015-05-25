@@ -2,13 +2,16 @@ package model;
 
 import java.util.*;
 import javax.swing.table.AbstractTableModel;
-import model.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ListMovies<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static String[] head = new String[]{"Id", "Titre", "Année", "Durée", "Réalisateur", "Type", "Acteurs", "Genre", "Description"};
 
 	private ArrayList<K> list;
@@ -231,7 +234,6 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		 
 		int i = 0;
 		int j = 0;
-		int k = 0;
 		double distance = 32;
 		double temp = 0;
 		int current_classe = 0;	

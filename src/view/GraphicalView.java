@@ -12,6 +12,10 @@ import java.io.*;
 
 public class GraphicalView extends JFrame{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private PopupAddMovie popup;
 	private ListMovies<Movie> movies_base;
 	private ListMovies<Movie> movies_perso;
@@ -47,6 +51,11 @@ public class GraphicalView extends JFrame{
 		movies_propose = new ListMovies<Movie>();
 
 		my_movies = new JTable(movies_perso){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			//Implement table cell tool tips.           
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
@@ -65,6 +74,11 @@ public class GraphicalView extends JFrame{
 		};
 
 		my_propositions = new JTable(movies_propose){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			//Implement table cell tool tips.           
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
@@ -88,6 +102,11 @@ public class GraphicalView extends JFrame{
 		proposition_panel.add(panel_buttons, BorderLayout.NORTH);
 
 		base = new JTable(movies_base){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			//Implement table cell tool tips.           
             public String getToolTipText(MouseEvent e) {
                 String tip = null;
@@ -215,6 +234,7 @@ public class GraphicalView extends JFrame{
 	}
 
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		GraphicalView v = new GraphicalView();
 	}
 }

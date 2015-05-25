@@ -1,6 +1,5 @@
 package controller;
 
-import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 

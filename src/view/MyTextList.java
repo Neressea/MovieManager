@@ -7,6 +7,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MyTextList extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel list;
 	private ArrayList<JTextField> fields;
 

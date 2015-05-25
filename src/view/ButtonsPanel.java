@@ -3,14 +3,14 @@ package view;
 import model.*;
 
 import javax.swing.*;
-import controller.*;
-import model.*;
-import java.awt.*;
 import java.awt.event.*;
-import javax.swing.event.*;
 import java.util.ArrayList;
 
 public class ButtonsPanel extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JButton launch;
 	JComboBox<Integer> combo_nb;
 
