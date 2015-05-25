@@ -12,6 +12,18 @@ public class Movie{
 	private int id;
 
 	public Movie(){}
+	
+	public Movie(int i, String t, int y, int du, String dir, String ty, ArrayList<String> k, ArrayList<String> a, String d){
+		id=i;
+		title=t;
+		year=y;
+		duration=du;
+		director=dir;
+		type=ty;
+		kinds=(k!=null)?k:new ArrayList<String>();
+		actors= (a!=null) ? a : new ArrayList<String>();
+		description=d;
+	}
 
 	public String toJson(){
 		String json="{\"title\":\""+title+"\",";
@@ -38,26 +50,10 @@ public class Movie{
 		return json+"]}";
 	}
 
-	public static Movie fromJson(){
-		return null;
-	}
-
 	public static Movie fromJson(String json){
 		Movie m = new Movie();
 
 		return m;
-	}
-
-	public Movie(int i, String t, int y, int du, String dir, String ty, ArrayList<String> k, ArrayList<String> a, String d){
-		id=i;
-		title=t;
-		year=y;
-		duration=du;
-		director=dir;
-		type=ty;
-		kinds=k;
-		actors=a;
-		description=d;
 	}
 
 	public String toString(){
@@ -148,6 +144,10 @@ public class Movie{
 
 	public String getTitle(){return title;}
 
+	/**
+	 * éthode utilisée pour le modèle MVC avec AbstractTableModel
+	 * @return Un tableau d'objet représentant l'affichage d'une instance de Movie.
+	 */
 	public Object[] toObjectTable(){
 		String act="";
 		String k="";
@@ -156,22 +156,6 @@ public class Movie{
 		for (int i=0; i<kinds.size(); i++) k+=(i<kinds.size()-1) ? kinds.get(i)+", " : kinds.get(i);
 
 		return new Object[]{id, title, year, duration, director, type, act, k, description};
-	}
-
-	public static void main(String[] args) {
-	
-		/*ArrayList<Movie> movies=null;
-
-		try{
-			movies = load("films.txt");
-		}catch(Exception e){
-			System.out.println("Erreur durant la lecture du fichier");
-			e.printStackTrace();
-		}
-
-		for (int i=0; i<movies.size() && movies != null; i++) {
-			System.out.println(movies.get(i));
-		}*/
 	}
 
 	public void setId(int i){

@@ -21,16 +21,6 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 		this.addValue(new Duo<K, V>(newlist));
 	}
 
-	/*public void addValueDuo(Table newtable, int i){
-		this.liste.get(i).getV().add(newtable);
-		ListMovies temp = new ListMovies();
-		for (int j = 0; i < this.liste.get(i).size(); i++){
-			temp.add(this.liste.get(i).getV().getBarycentre);
-		}
-		temp.findBarycentre();
-		this.liste.get(i).K = temp.getBarycentre();
-	}*/
-
 	public K getBarycentre(){
 		ListMovies<K> temp = new ListMovies<K>(liste.get(0).getK());		
 
