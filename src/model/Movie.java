@@ -160,11 +160,9 @@ public class Movie{
 
 		return new Object[]{id, title, year, duration, director, type, act, k, description};
 	}
-
 	public void setId(int i){
 		id=i;
 	}
-
 	public void setTitle(String t){
 		title=t;
 	}

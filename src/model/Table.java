@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Table <K extends Movie, V extends Barycentrable<K>> implements Barycentrable<K>{
 	private ArrayList<Duo<K, V>> liste;
 
-	public Table(ListMovies<K> newlist, int number, int numberMovies){
+	public Table(List<K> newlist, int number, int numberMovies){
 
 	}
 
@@ -22,7 +22,7 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 	}
 
 	public K getBarycentre(){
-		ListMovies<K> temp = new ListMovies<K>(liste.get(0).getK());		
+		List<K> temp = new List<K>(liste.get(0).getK());		
 
 		for (int i = 1; i < liste.size(); i++){
 			temp.addMovie(this.liste.get(i).getK());
@@ -36,6 +36,4 @@ public class Table <K extends Movie, V extends Barycentrable<K>> implements Bary
 	public ArrayList<Duo<K, V>> getListe(){
 		return this.liste;
 	}
-
-
 }

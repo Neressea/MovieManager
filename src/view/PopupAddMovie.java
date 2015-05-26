@@ -6,6 +6,7 @@ import java.awt.event.*;
 import org.jdatepicker.impl.*;
 import java.util.*;
 import model.*;
+import model.List;
 
 public class PopupAddMovie extends JFrame{
 	/**
@@ -77,7 +78,7 @@ public class PopupAddMovie extends JFrame{
 		ok = new JButton("Ajouter");
 		ok.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				ListMovies<Movie> l = owner.getMoviesPerso();
+				List<Movie> l = owner.getMoviesPerso();
 				l.addMovie(createMovie(l.getRowCount()+1));
 				
 				setVisible(false);

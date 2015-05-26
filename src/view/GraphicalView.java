@@ -1,10 +1,14 @@
 package view;
 
 import javax.swing.*;
+
 import controller.*;
 import model.*;
+import model.List;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.event.*;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -17,9 +21,9 @@ public class GraphicalView extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	private PopupAddMovie popup;
-	private ListMovies<Movie> movies_base;
-	private ListMovies<Movie> movies_perso;
-	private ListMovies<Movie> movies_propose;
+	private List<Movie> movies_base;
+	private List<Movie> movies_perso;
+	private List<Movie> movies_propose;
 	private JTable my_movies;
 	private JTable my_propositions;
 	private JTable base;
@@ -41,14 +45,14 @@ public class GraphicalView extends JFrame{
 
 		movies_base = null;
 		try{
-			movies_base = ListMovies.load("films.txt");
+			movies_base = List.load("films.txt");
 		}catch(Exception e){
 			System.out.println("Erreur durant la lecture du fichier");
 			e.printStackTrace();
 		}
 
-		movies_perso = new ListMovies<Movie>();
-		movies_propose = new ListMovies<Movie>();
+		movies_perso = new List<Movie>();
+		movies_propose = new List<Movie>();
 
 		my_movies = new JTable(movies_perso){
 			/**
@@ -65,10 +69,9 @@ public class GraphicalView extends JFrame{
 
                 try {
                     tip = "<html><p width=\"500\">"+getValueAt(rowIndex, colIndex).toString()+"</p></html>";
-                } catch (RuntimeException e1) {
+                }catch (RuntimeException e1) {
                     //catch null pointer exception if mouse is over an empty line
                 }
-
                 return tip;
             }
 		};
@@ -97,7 +100,7 @@ public class GraphicalView extends JFrame{
 		};
 
 		JPanel proposition_panel = new JPanel(new BorderLayout());
-		proposition_panel.add(my_propositions, BorderLayout.CENTER);
+		proposition_panel.add(new JScrollPane(my_propositions), BorderLayout.CENTER);
 		ButtonsPanel panel_buttons = new ButtonsPanel(my_propositions, movies_base, movies_perso, movies_base.getList().size());
 		proposition_panel.add(panel_buttons, BorderLayout.NORTH);
 
@@ -123,21 +126,38 @@ public class GraphicalView extends JFrame{
                 return tip;
             }
 		};
+		
+		JPanel base_panel = new JPanel(new BorderLayout());
+		JButton add_list_button = new JButton("Ajouter la sélection à ma liste");
+		base_panel.add(add_list_button, BorderLayout.NORTH);
+		base_panel.add(new JScrollPane(base), BorderLayout.CENTER);
 
-		JPanel personnel_movies = new JPanel(new BorderLayout());
+		final JPanel personnel_movies = new JPanel(new BorderLayout());
 		JButton add_movie = new JButton("Ajouter un film");
 		add_movie.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0){
 	       		popup.setVisible(true);
     		}
 		});
 
 		personnel_movies.add(add_movie, BorderLayout.NORTH);
 		personnel_movies.add(new JScrollPane(my_movies), BorderLayout.CENTER);
+		
+		add_list_button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int [] indexes = base.getSelectedRows();
+				for (int i = 0; i < indexes.length; i++) {
+					Movie m = movies_base.getList().get(indexes[i]);
+					movies_perso.addMovie(m);
+				}
+				table.setSelectedComponent(personnel_movies);
+			}
+		});
 
 		table.addTab("Mes films", personnel_movies);
-		table.addTab("Mes recommandations", new JScrollPane(proposition_panel));
-		table.addTab("Base de films", new JScrollPane(base));
+		table.addTab("Mes recommandations", proposition_panel);
+		table.addTab("Base de films", base_panel);
 
 		this.setContentPane(table);
 
@@ -184,7 +204,7 @@ public class GraphicalView extends JFrame{
 					}
 				}
 
-	       		ListMovies<Movie> list = ListMovies.fromJson(json);
+	       		List<Movie> list = List.fromJson(json);
 	       		System.out.println(list.getBarycentre());
     		}
 		});
@@ -210,7 +230,7 @@ public class GraphicalView extends JFrame{
 		this.setJMenuBar(barre);
 	}
 
-	public ListMovies<Movie> getSelectedList(){
+	public List<Movie> getSelectedList(){
 		int ind = table.getSelectedIndex();
 		if(ind == 2)
 			return movies_base;
@@ -221,7 +241,7 @@ public class GraphicalView extends JFrame{
 		return movies_propose; 
 	}
 
-	public ListMovies<Movie> getMoviesPerso(){
+	public List<Movie> getMoviesPerso(){
 		return movies_perso;
 	}
 

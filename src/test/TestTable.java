@@ -7,13 +7,15 @@ import model.*;
 public class TestTable {
 	
 	@Test
-	public final void test_(){
-		
-	}
-	
-	@Test
 	public final void test_addValue(){
+		Table<Movie, List<Movie>> t = new Table<Movie, List<Movie>>();
 		
+		//Empty table
+		
+		
+		//With one element
+		
+		//With more elements
 	}
 	
 	@Test

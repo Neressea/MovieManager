@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ListMovies<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
+public class List<K extends Movie> extends AbstractTableModel implements Barycentrable<K>{
 	/**
 	 * 
 	 */
@@ -17,13 +17,13 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	private ArrayList<K> list;
 	private K barycentre;
 
-	public ListMovies(){
+	public List(){
 		super();
 		list = new ArrayList<K>();
 		barycentre = null;
 	}
 
-	public ListMovies(K movie){
+	public List(K movie){
 		super();
 		list = new ArrayList<K>();
 		barycentre = movie;
@@ -57,8 +57,8 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 	}
 
-	public static ListMovies<Movie> load(String file) throws IOException{
-		ListMovies<Movie> movies = new ListMovies<Movie>();
+	public static List<Movie> load(String file) throws IOException{
+		List<Movie> movies = new List<Movie>();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 
 		String line = reader.readLine();
@@ -125,7 +125,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 	}
 
-	public void affiche_solve(ArrayList<ListMovies<K>> result, int classe[]){
+	public void affiche_solve(ArrayList<List<K>> result, int classe[]){
 
 		int temp = 0;		
 
@@ -155,8 +155,8 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		return json+"]}";
 	}
 
-	public static ListMovies<Movie> fromJson(String json){
-		ListMovies<Movie> lm = new ListMovies<Movie>();
+	public static List<Movie> fromJson(String json){
+		List<Movie> lm = new List<Movie>();
 
 		String [] elems = json.split(":");
 		lm.barycentre = (!elems[1].equals("null")) ? Movie.fromJson(elems[1]) : null;
@@ -226,8 +226,8 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 
 	//fonction qui permet de trier une liste Movies dans l'ordre croissant de leur distance au barycentre. Algorithme utilisé est le tri par sélection
 
-	public ArrayList<ListMovies<K>> sort(int total_movies, int numberMovies, int number){
-		ArrayList<ListMovies<K>> sortedlist = new ArrayList<ListMovies<K>>();
+	public ArrayList<List<K>> sort(int total_movies, int numberMovies, int number){
+		ArrayList<List<K>> sortedlist = new ArrayList<List<K>>();
 		ArrayList<K> buffer = new ArrayList<K>();
 		ArrayList<Integer> randomnumber = new ArrayList<Integer>();
 		int classe[] = new int[this.list.size()];
@@ -263,7 +263,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 
 		for (i = 0; i < number; i++){
-			sortedlist.add(new ListMovies<K>(this.list.get(randomnumber.get(i))));
+			sortedlist.add(new List<K>(this.list.get(randomnumber.get(i))));
 			classe[randomnumber.get(i)] = i;
 		}
 
@@ -374,9 +374,9 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 	
 	}
 
-	//Fonction qui créer des ListMovies en minimisant les distances entre les films de ces ListMovies. L'algorithme principale de cette fonction est H-means dont le but est de minimiser l'inertie totale.
+	//Fonction qui créer des List en minimisant les distances entre les films de ces List. L'algorithme principale de cette fonction est H-means dont le but est de minimiser l'inertie totale.
 
-	public static ListMovies<Movie> getPropositions(ListMovies<Movie> movies_base, ListMovies<Movie> viewed, int number_max_of_film, int distance_max){
+	public static List<Movie> getPropositions(List<Movie> movies_base, List<Movie> viewed, int number_max_of_film, int distance_max){
 
 		int numberofmiddleTable = 2;
 		int sizeofmiddleTable = 4;
@@ -390,14 +390,14 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		viewed.findBarycentre();
 		Movie ref = viewed.getBarycentre();
 		//On récupère le barycentre des films déjà vus par l'utilisateur avec viewed.getBarycentre(). Il faudra le créer avant avec findBarycentre().
-		ArrayList<ListMovies<Movie>> temp = movies_base.sort(movies_base.getList().size(), 14,7);
+		ArrayList<List<Movie>> temp = movies_base.sort(movies_base.getList().size(), 14,7);
 
 		//On trie la liste pour créer les tables.		
 		
-		ArrayList<Table<Movie, ListMovies<Movie>>> data = new ArrayList<Table<Movie, ListMovies<Movie>>>();
+		ArrayList<Table<Movie, List<Movie>>> data = new ArrayList<Table<Movie, List<Movie>>>();
 		
-		ListMovies<Movie> prop = new ListMovies<Movie>();
-		ListMovies<Movie> current = new ListMovies<Movie>();
+		List<Movie> prop = new List<Movie>();
+		List<Movie> current = new List<Movie>();
 
 		ArrayList<ArrayList<Integer>> forbid = new ArrayList<ArrayList<Integer>>(7);
 
@@ -406,7 +406,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		}
 
 		for (int i = 0 ; i < numberofmiddleTable ; i ++){
-			data.add(new Table<Movie,ListMovies<Movie>>());
+			data.add(new Table<Movie,List<Movie>>());
 			data.get(i).addList(temp.get(0));
 			temp.remove(0);
 
@@ -417,7 +417,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 				}
 				
 				for (int k = 0; k < temp.size(); k++){
-					ListMovies<Movie> buff = temp.get(k);
+					List<Movie> buff = temp.get(k);
 					tempor = buff.getBarycentre().dist(data.get(i).getListe().get(0).getK());
 					if (tempor < distance){
 						distance = tempor;
@@ -468,7 +468,7 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 			test = 300;
 
 			for (int i = 0 ; i < data.get(indice).getListe().size(); i ++){
-				Duo<Movie,ListMovies<Movie>> atest = data.get(indice).getListe().get(i);
+				Duo<Movie,List<Movie>> atest = data.get(indice).getListe().get(i);
 
 				dist_test = ref.dist(atest.getK());
 			
