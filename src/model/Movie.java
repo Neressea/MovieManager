@@ -89,24 +89,27 @@ public class Movie{
 	* For each spec, we add a weight if they arre different, or 0 if they are the same.
 	* In order to add a hierarchy in the specs, each weight is the double of the weight of the precedent spec.
 	* Here is the hierarchy :
-	* 		-> title 16
-	* 		-> kinds 8 (each kind is weight 8/number of kinds)
-	* 		-> director 4
-	* 		-> actors 2 (each actor is weight 2/number of actors)
-	* 		-> type 1
+	* 		-> title 80
+	* 		-> kinds 40 (each kind is weight 8/number of kinds)
+	* 		-> director 20
+	* 		-> actors 10 (each actor is weight 2/number of actors)
+	* 		-> type 5
+	* Note : the maximal distance is 155.
 	* @param m The movie we want to compare the current movie to.
 	* @return The distance between the two movies
 	*/
 	public double dist(Movie m){
 		double dist = 0;
+		
+		if (m.title == null || title==null) return 155; //One of the movies is empty, we return the maximal distance
 
 		dist+=(title.matches(".*"+m.title+".*") || m.title.matches(".*"+title+".*")) ? 0 : 80.0;
 
 		if(kinds != null && m.kinds != null){
 			ArrayList<String> forbid = new ArrayList<String>();
-			for (int i=0; i<kinds.size(); i++) {
+			for (int i=0; i<kinds.size(); i++){
 				if(!m.kinds.contains(kinds.get(i))){
-					dist+=40.0 / kinds.size();	
+					dist+=40.0 / kinds.size();
 					forbid.add(kinds.get(i));
 				}
 			}
