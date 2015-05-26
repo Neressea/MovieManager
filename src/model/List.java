@@ -143,6 +143,7 @@ public class List<K extends Movie> extends AbstractTableModel implements Barycen
 	}
 
 	public String toJson(){
+		findBarycentre();
 		String json="{\"barycentre\":";
 		json+= (barycentre != null) ? barycentre.toJson() : "\"null\"";
 		json+= ",\"list\":[";
@@ -160,10 +161,11 @@ public class List<K extends Movie> extends AbstractTableModel implements Barycen
 
 		String [] elems = json.split(":");
 		lm.barycentre = (!elems[1].equals("null")) ? Movie.fromJson(elems[1]) : null;
-		//elems = json.split("[");
-
-		//System.out.println(json.match("\"barycentre\":\".*\""));
-
+		elems = json.split("\"list\":\\[");
+		elems = elems[1].split("\\]}$");
+		String l = elems[0];
+		System.out.println(l);
+		
 		return lm;
 	}
 

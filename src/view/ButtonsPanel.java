@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sun.xml.internal.ws.wsdl.parser.MexEntityResolver;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -41,11 +43,10 @@ public class ButtonsPanel extends JPanel{
 
 		launch.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				List<Movie> movies = List.getPropositions(movies_base, movies_viewed, (Integer) combo_nb.getSelectedItem(), 0);
+				List<Movie> movies = List.getPropositions(movies_base, movies_viewed, (Integer) combo_nb.getSelectedItem(), (int) (max_dist * Movie.maximal_distance));
 				if(movies != null)
 					my_propositions.setModel(movies);
 				else{
-					//Il n'y a pas de films entrés
 					JOptionPane.showMessageDialog((JButton) arg0.getSource(), "Entrez des films pour recevoir des propositions !", "Erreur durant le processus", JOptionPane.ERROR_MESSAGE);
 				}
 			}

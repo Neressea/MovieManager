@@ -205,7 +205,16 @@ public class GraphicalView extends JFrame{
 				}
 
 	       		List<Movie> list = List.fromJson(json);
-	       		System.out.println(list.getBarycentre());
+	       		switch(table.getSelectedIndex()){
+	       		case 1:
+	       			movies_perso = list;
+	       			my_movies.setModel(movies_perso);
+	       			break;
+	       		case 3:
+	       			movies_base = list;
+	       			base.setModel(movies_base);
+	       			break;
+	       		}
     		}
 		});
 
