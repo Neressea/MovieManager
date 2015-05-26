@@ -508,6 +508,14 @@ public class List<K extends Movie> extends AbstractTableModel implements Barycen
 			if (data.get(indice).getListe().isEmpty()){
 				data.remove(indice);
 			}
+			
+			
+			for (int i = 0; i < prop.getList().size(); i++){
+				if (prop.getList().get(i).dist(ref) >= distance_max){
+					prop.getList().remove(i);
+					
+				}
+			}
 
 		}
 

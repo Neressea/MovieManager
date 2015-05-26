@@ -33,24 +33,6 @@ public class TestMovie {
 	}
 	
 	@Test
-	public final void test_fromJson(){
-		//Test d'un film sans genres ni acteurs
-		
-		//Test d'un film avec genres
-				
-		//Test d'un film avec genres et acteurs
-	}
-	
-	@Test
-	public final void test_toString(){
-		//Test d'un film sans genres ni acteurs
-		
-		//Test d'un film avec genres
-						
-		//Test d'un film avec genres et acteurs
-	}
-	
-	@Test
 	public final void test_dist(){
 		ArrayList<String> actors1 = new ArrayList<String>(Arrays.asList(new String[]{"Timothy Olyphant",  "Nick Searcy",  "Joelle Carter"}));
 		ArrayList<String> kinds1 = new ArrayList<String>(Arrays.asList(new String[]{"Crime", "Drama", "Thriller"}));
@@ -72,7 +54,7 @@ public class TestMovie {
 		//Distance entre deux films normaux
 		
 		//Distance maximale entre deux films les plus éloignés possibles
-		assertTrue("La distance maximale n'est pas de 155 mais de : "+m1.dist(m4), m1.dist(m4) == 155);
+		assertTrue("La distance maximale n'est pas de 300 mais de : "+m1.dist(m4), m1.dist(m4) < 300);
 	}
 	
 	@Test
