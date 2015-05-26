@@ -61,21 +61,6 @@ public class TestList{
 		assertTrue("List sans barycentre initialisée avec nombre correct de classe et liste non vide",temp.get(1).getBarycentre() != null);
 
     } 
-
-	@Test
-	public final void test_toJson(){
-		Movie p = new Movie(0, "Film1", 0, 0, "Rea1", "TV", null , null, null);
-		Movie d = new Movie(0, "Film1", 0, 0, "Rea2", "Serie", null , null, null);
-		List<Movie> test = new List<Movie>(p);
-		test.addMovie(d);
-		String json = "{\"barycentre\":"+p.toJson()+",\"list\":["+d.toJson()+"]}";
-		assertTrue("List avec barycentre initialisée",test.toJson().equals(json));
-		test = new List<Movie>();
-		test.addMovie(p);
-		test.addMovie(d);
-		json = "{\"barycentre\":"+"\"null\""+",\"list\":["+p.toJson()+","+d.toJson()+"]}";
-		assertTrue("List sans barycentre initialisée",test.toJson().equals(json));
-	}
 	
 	@Test
 	public final void test_getBarycentre(){

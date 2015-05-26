@@ -10,7 +10,7 @@ public class Movie{
 	private ArrayList<String> actors;
 	private String type; //Movie or TV serie
 	private int id;
-	public static final int maximal_distance = 155;
+	public static final int maximal_distance = 300;
 
 	public Movie(){}
 	
