@@ -239,6 +239,20 @@ public class ListMovies<K extends Movie> extends AbstractTableModel implements B
 		int current_classe = 0;	
 		int nb = 0;
 		int tour_max = 200;
+		
+		if (this.barycentre != null){
+			return null;
+		}
+		
+		if (this.list.size() != total_movies){
+			return null;
+		}
+		
+		if (total_movies != number*numberMovies){
+			return null;
+		}
+		
+		//On pourra remplacer les null par une exception
 
 		while(i < number){
 			Random rand = new Random();

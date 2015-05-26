@@ -4,10 +4,6 @@ public class Duo<K extends Movie, V extends Barycentrable<K>>{
 	private K key;
 	private V value;
 
-	public static void main(String[] args) {
-
-	}
-
 	public Duo (V newlist){
 		this.value = newlist;
 		this.key = newlist.getBarycentre();
